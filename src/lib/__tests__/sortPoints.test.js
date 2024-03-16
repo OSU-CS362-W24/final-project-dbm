@@ -1,17 +1,14 @@
 const sortPoints = require('../../lib/sortPoints');
 
-// Describing the test suite for the sortPoints function
 describe('sortPoints function', () => {
   
-    // Within the sortPoints function suite, we're describing the sorting functionality
     describe('Sorting functionality', () => {
 
-        // This is a specific test case within the sorting functionality suite
+        // This is a specific test case within the sorting functionality
         test('sorts points in ascending order', () => {
             const points = [{ x: 10, y: 20 }, { x: 5, y: 10 }, { x: 7, y: 8 }];
             const sortedPoints = sortPoints(points);
 
-            // We expect the sortedPoints array to be equal to the expected sorted array
             expect(sortedPoints).toEqual([{ x: 5, y: 10 }, { x: 7, y: 8 }, { x: 10, y: 20 }]);
         });
 
