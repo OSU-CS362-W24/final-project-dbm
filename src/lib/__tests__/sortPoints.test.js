@@ -2,11 +2,12 @@ const sortPoints = require('../../lib/sortPoints');
 
 // Describing the test suite for the sortPoints function
 describe('sortPoints function', () => {
+  
     // Within the sortPoints function suite, we're describing the sorting functionality
     describe('Sorting functionality', () => {
+
         // This is a specific test case within the sorting functionality suite
         test('sorts points in ascending order', () => {
-            // We define an array of points with x and y coordinates
             const points = [{ x: 10, y: 20 }, { x: 5, y: 10 }, { x: 7, y: 8 }];
             const sortedPoints = sortPoints(points);
 
