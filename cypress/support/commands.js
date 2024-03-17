@@ -58,12 +58,20 @@ Cypress.Commands.add('populateChart', (title, xlabel, ylabel, values) => {
    
     
 })
-
+/**
+ *  assertChartValues(string title, string xlabel, string ylabel, array[int] values, string color)
+ *      will assert that the values present in the current page are true, and match the inputted user
+ *      values.
+ * 
+ *  The only added change from this and populateChart is the addition of the color parameter.
+ *  
+ */
 Cypress.Commands.add('assertChartValues', (title, xlabel, ylabel, values, color) => {
     cy.get('#chart-title-input').should('have.value', title)
     cy.get('#x-label-input').should('have.value', xlabel)
     cy.get('#y-label-input').should('have.value', ylabel)
-    cy.get('#chart-color-input').should('have.value', color.toLowerCase())
+    // color hex is stored in lowercase, couldn't get {matchCase: false} to work with should()
+    cy.get('#chart-color-input').should('have.value', color.toLowerCase()) 
     // loop through li vals and assert that they have the correct value
     let nthChild = 4
     for(let i = 0; i < values.length; i += 2){
