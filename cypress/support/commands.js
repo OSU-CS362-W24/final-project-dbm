@@ -55,19 +55,15 @@ Cypress.Commands.add('populateChart', (title, xlabel, ylabel, values) => {
         if(i + 2 !== values.length) // don't add empty x y containers
             cy.get('#add-values-btn').click()
     }
-    // manually set the color value as the popup causes cypress to freak out
-    cy.get('#chart-color-input').then(e => {
-        e.val('#31B7EA')
-    })
-
+   
     
 })
 
-Cypress.Commands.add('assertChartValues', (title, xlabel, ylabel, values) => {
+Cypress.Commands.add('assertChartValues', (title, xlabel, ylabel, values, color) => {
     cy.get('#chart-title-input').should('have.value', title)
     cy.get('#x-label-input').should('have.value', xlabel)
     cy.get('#y-label-input').should('have.value', ylabel)
-  
+    cy.get('#chart-color-input').should('have.value', color.toLowerCase())
     // loop through li vals and assert that they have the correct value
     let nthChild = 4
     for(let i = 0; i < values.length; i += 2){
