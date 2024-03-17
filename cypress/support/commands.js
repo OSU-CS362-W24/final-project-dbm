@@ -26,7 +26,7 @@
 require("@testing-library/cypress/add-commands")
 
 /**
- * buildChart(string title, string xlabel, string ylabel, array[int] values)
+ * populateChart(string title, string xlabel, string ylabel, array[int] values)
  * 
  * 
  *  This function will build a chart from 4 parameters:
@@ -38,7 +38,7 @@ require("@testing-library/cypress/add-commands")
  * 
  *  DOES NOT GENERATE THE CHART. 
  */
-Cypress.Commands.add('buildChart', (title, xlabel, ylabel, values) => {
+Cypress.Commands.add('populateChart', (title, xlabel, ylabel, values) => {
     cy.get('#chart-title-input').type(title)
     cy.get('#x-label-input').type(xlabel)
     cy.get('#y-label-input').type(ylabel)
@@ -61,4 +61,21 @@ Cypress.Commands.add('buildChart', (title, xlabel, ylabel, values) => {
     })
 
     
+})
+
+Cypress.Commands.add('assertChartValues', (title, xlabel, ylabel, values) => {
+    cy.get('#chart-title-input').should('have.value', title)
+    cy.get('#x-label-input').should('have.value', xlabel)
+    cy.get('#y-label-input').should('have.value', ylabel)
+  
+    // loop through li vals and assert that they have the correct value
+    let nthChild = 4
+    for(let i = 0; i < values.length; i += 2){
+      let xval = ':nth-child(' + nthChild + ') > .x-value-input'
+      nthChild += 1
+      let yval = ':nth-child(' + nthChild + ') > .y-value-input'
+      nthChild += 1
+      cy.get(xval).should('have.value', values[i])
+      cy.get(yval).should('have.value', values[i + 1])
+    }
 })
