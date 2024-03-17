@@ -34,7 +34,9 @@ require("@testing-library/cypress/add-commands")
  *  xlabel: the x label of the chart
  *  ylabel: the y label of the chart
  *  values: an array of x y values for the chart. X is held in the even
- *      idx's, and y is help in the odd. 
+ *      idx's, and y is held in the odd. 
+ * 
+ *  DOES NOT GENERATE THE CHART. 
  */
 Cypress.Commands.add('buildChart', (title, xlabel, ylabel, values) => {
     cy.get('#chart-title-input').type(title)
@@ -50,7 +52,7 @@ Cypress.Commands.add('buildChart', (title, xlabel, ylabel, values) => {
         nthChild += 1;
         cy.get(x).type(values[i])
         cy.get(y).type(values[i + 1])
-        if(i + 2 !== values.length)
+        if(i + 2 !== values.length) // don't add empty x y containers
             cy.get('#add-values-btn').click()
     }
     // manually set the color value as the popup causes cypress to freak out
@@ -58,5 +60,5 @@ Cypress.Commands.add('buildChart', (title, xlabel, ylabel, values) => {
         e.val('#31B7EA')
     })
 
-    cy.get('#generate-chart-btn').click()
+    
 })
