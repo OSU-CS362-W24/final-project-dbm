@@ -83,8 +83,7 @@ it('Re-opening a saved chart ', () => {
   let chartTitle = 'Cats vs. Dogs'
   let color = '#31B7EA'
   cy.populateChart(chartTitle, xlabel, ylabel, values)
-  let document = cy.document()
-  console.log(document)
+  
   cy.get('#chart-color-input').then(e => {
     e.val(color)
   }).trigger('change') // trigger the onchange event so the color value holds
