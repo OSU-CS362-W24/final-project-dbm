@@ -89,6 +89,7 @@ describe('Generate Chart Alert Functionality', () => {
         alertSpy.mockRestore();
         jest.resetModules();
         jest.restoreAllMocks();
+        window.localStorage.clear();
     });
 
     test('displays an alert if axis labels are missing', async () => {
@@ -121,19 +122,12 @@ describe('Generate Chart Alert Functionality', () => {
         await user.type(xLabelInput, 'A');
         await user.type(yLabelInput, 'B');
 
-        // These asserts aren't part of the final test, just using to debug as they fail when they should both pass (asserting that the data entry elements should be empty)
-        //let xValueInput = document.querySelectorAll(".x-value-input");
-        //let yValueInput = document.querySelectorAll(".y-value-input");
-        //expect(xValueInput[0].value).toBe('');
-        //expect(yValueInput[0].value).toBe('');
-
-
         // Attempt to generate the chart without data
         await user.click(generateChartBtn);
 
         // Verify alert was displayed
         expect(alertSpy).toHaveBeenCalled();
-        expect(alertSpy).toHaveBeenCalledWith(expect.stringContaining("No data specified"));
+        expect(alertSpy).toHaveBeenCalledWith(expect.stringContaining("No data specified!"));
     });
 });
 
@@ -197,6 +191,7 @@ describe('Generate Chart Sending Data to generateChartImg', () => {
         );
         jest.resetModules();
         jest.restoreAllMocks();
+        window.localStorage.clear();
     });
 
     test('generateChartImg is called with user-entered data', async () => {
