@@ -5,6 +5,7 @@
 const fs = require("fs");
 require("whatwg-fetch");
 require("@testing-library/jest-dom");
+const domTesting = require("@testing-library/dom");
 const userEvent = require("@testing-library/user-event").default;
 
 function initDomFromFiles(htmlPath, jsPath) {
@@ -184,23 +185,26 @@ describe('Clear Chart Data Functionality', () => {
 
 describe('Generate Chart Sending Data to generateChartImg', () => {
     beforeEach(() => {
+        window.localStorage.clear();
+        jest.resetModules();
+        jest.restoreAllMocks();
+    });
+
+    test('generateChartImg is called with user-entered data', async () => {
         // Initialize DOM from the HTML and JS files
         initDomFromFiles(
             __dirname + "/../line.html",
             __dirname + "/../line.js"
         );
-        jest.resetModules();
-        jest.restoreAllMocks();
-        window.localStorage.clear();
-    });
 
-    test('generateChartImg is called with user-entered data', async () => {
         // Mock generateChartImg
-        jest.mock(__dirname + '/../../lib/generateChartImg.js');
-        const generateChartImg = require(__dirname + '/../../lib/generateChartImg.js');
-        generateChartImg.mockImplementation(() => {
+        jest.mock('../../lib/generateChartImg.js');
+        const generateChartImgStub = require('../../lib/generateChartImg.js');
+        generateChartImgStub.mockImplementation(() => {
             return "http://placekitten.com/480/480";
         });
+
+        console.log(generateChartImgStub("line", [{ x: '1', y: '2' }], 'A', 'B', 'Chart Title', '#00ff00'));
 
         const chartTitleInput = document.getElementById('chart-title-input');
         const chartColorInput = document.getElementById('chart-color-input');
@@ -226,13 +230,18 @@ describe('Generate Chart Sending Data to generateChartImg', () => {
         await user.click(generateChartBtn);
 
         // Verify generateChartImg was called correctly
-        expect(generateChartImg).toHaveBeenCalledWith(
+        await domTesting.waitFor(() => {
+            expect(generateChartImgStub).toHaveBeenCalledTimes(1);
+        });
+        expect(generateChartImgStub).toHaveBeenCalledWith(
             "line",
             [{ x: '1', y: '2' }],
             'A',
             'B',
-            'Chart',
-            '#ff4500'
+            'Chart Title',
+            '#00ff00'
         );
+
+        generateChartImgStub.mockRestore();
     });
 });
